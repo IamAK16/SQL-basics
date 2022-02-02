@@ -1,0 +1,96 @@
+CREATE TABLE Persons (
+    PersonID int,
+    LastName varchar(255),
+    FirstName varchar(255),
+    Address varchar(255),
+    City varchar(255)
+);
+
+CREATE TABLE Dept (
+    DeptID int,
+    DName varchar(255),
+    Dlocation varchar(255)
+);
+Alter table Persons add deptid int;
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City, salary, deptid) VALUES (1, 'PQR', 'Donald', 'Gujarat', 'Ahmedabad', 500, 1);
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City, salary, deptid) VALUES (2, 'XYZ', 'Vladimir', 'Maharashtra', 'Mumbai', 100, 2);
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City, salary, deptid) VALUES (3, 'PQR', 'Joe', 'Karnataka', 'Bengaluru', 300, 3);
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City, salary, deptid) VALUES (4, 'ABC', 'Justin', 'Karnataka', 'Bengaluru', 400, 3);
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City, salary, deptid) VALUES (5, 'ABC', 'Johnson', 'Karnataka', 'Bengaluru', 400, 1);
+INSERT INTO Persons (PersonID, LastName, FirstName, Address, City, salary, deptid) VALUES (6, 'FGH', 'Borris', 'Kerala', 'Trivandrum', 300, 1);
+
+INSERT INTO Dept (DeptID, Dname, Dlocation) VALUES (1, 'Finance', 'Mumbai');
+INSERT INTO Dept (DeptID, Dname, Dlocation) VALUES (2, 'Sales', 'Delhi');
+INSERT INTO Dept (DeptID, Dname, Dlocation) VALUES (3, 'Admin', 'Bengaluru');
+INSERT INTO Dept (DeptID, Dname, Dlocation) VALUES (4, 'Marketing', 'Hyderabad');
+
+
+--ADD PRIMARY KEY
+alter table persons
+add primary key (personid);
+
+alter table dept
+add primary key (deptid);
+
+--ADD Foregin Key
+alter table persons
+add foreign key (deptid) references dept(deptid);
+
+rollback;
+
+commit;
+truncate table Persons;
+truncate table Dept;
+select * from Persons;
+select * from dept;
+select * from Persons where FirstName like '_h%';
+select * from Persons where PersonID in (1,2);
+select * from Persons where salary > 200;
+select * from Persons where FirstName LIKE 'D%';
+select * from Persons where FirstName LIKE '_o%%a%';
+select * from Persons where salary <> 500;
+
+
+--CONCATENATE
+select (firstname || ' ' || city) from Persons;
+
+--Union all - number of columns should be same, datatypes of column getting merged should be same
+select deptid from Persons
+union all
+select deptid from Dept;
+
+select deptid from Persons
+union 
+select deptid from Dept;
+
+--SORTING
+select * from Persons order by salary desc;
+select * from Persons order by salary;
+
+--Distinct
+select distinct(deptid) from persons;
+
+--ORDERBY
+select * from Persons order by salary desc;
+
+--Aggregate functions
+select count(personid) from Persons where city='Bengaluru';
+select sum(salary) from persons;
+select avg(salary) from persons;
+
+select 'count' as person_strength , count(*) from persons
+union all
+select 'total_salary' as tot_salary , sum(salary) from persons
+union all
+select 'max_salary' as max_sal , max(salary) from persons;
+
+--GROUP BY
+select deptid , count(*) from persons group by deptid;
+
+
+--HAVING
+select deptid from persons group by deptid having count(deptid)>1;
+
+select deptid, count(*) from Persons group by deptid, Address; 
+
+select personid, avg(salary) from persons group by personid, salary having salary>200;
